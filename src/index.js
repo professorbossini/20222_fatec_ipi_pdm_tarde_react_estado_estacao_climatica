@@ -2,10 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { EstacaoClimatica } from './EstacaoClimatica'
+import Loading from './Loading'
 class App extends React.Component {
 
   constructor (props){
-
     super(props)
     // this.state = {
     //   latitude: null,
@@ -15,7 +15,7 @@ class App extends React.Component {
     //   icone: null,
     //   mensagemDeErro: null
     // }
-    console.log('construtor')
+    //console.log('construtor')
   }
 
   state = {
@@ -32,13 +32,13 @@ class App extends React.Component {
     this.obterLocalizacao()
   }
 
-  componentDidUpdate(){
-    console.log("componentDidUpdate")
-  }
+  // componentDidUpdate(){
+  //   console.log("componentDidUpdate")
+  // }
 
-  componentWillUnmount(){
-    console.log("componentWillUnmount")
-  }
+  // componentWillUnmount(){
+  //   console.log("componentWillUnmount")
+  // }
 
   obterEstacao = (data, latitude) => {
     const anoAtual = data.getFullYear()
@@ -75,7 +75,7 @@ class App extends React.Component {
         let data = new Date()
         let estacao = this.obterEstacao(data, posicao.coords.latitude)
         let icone = this.icones[estacao]
-        console.log(icone)
+        // console.log(icone)
         this.setState({
           latitude: posicao.coords.latitude,
           longitude: posicao.coords.longitude,
@@ -92,21 +92,34 @@ class App extends React.Component {
   }
 
   render(){
-    console.log('render')
+    // console.log('render')
     return (
       // emmet
       <div className="container mt-2">
         <div className="row justify-content-center">
           <div className="col-md-8">
+            {
+              !this.state.latitude && !this.state.mensagemDeErro ?
+              <Loading 
+                // mensagem="Por favor, responda à solicitação de localização."
+              />
+              :
+              this.state.mensagemDeErro ?
+              <p className='border rounded p-2 fs-1 text-center'>
+                É preciso dar permissão para acesso à localização.
+                Atualize a página e tente de novo, ajustando a configuração do seu navegador.
+              </p>
+              :
              <EstacaoClimatica 
               icone={this.state.icone}
               estacao={this.state.estacao}
               latitude={this.state.latitude}
               longitude={this.state.longitude}
-              data={this.state.data}
-              mensagemDeErro={this.state.mensagemDeErro}
+              // data={this.state.data}
+              // mensagemDeErro={this.state.mensagemDeErro}
               obterLocalizacao={this.obterLocalizacao}
              />
+            }
           </div>
         </div>
       </div>
